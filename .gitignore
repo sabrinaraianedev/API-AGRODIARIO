@@ -1,4 +1,4 @@
 node_modules
 dist
 .env
-conexao.ts
+src/util/conexao.ts
