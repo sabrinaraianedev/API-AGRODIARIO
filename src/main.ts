@@ -3,10 +3,12 @@ import fazendaApi from './api/fazenda.api'
 import rotasTalhao from './api/talhao.api'
 import rotasPoda from './api/poda.api'
 import rotasPreparacaoSolo from './api/preparacaoSolo.api'
+import rotasLimpeza from './api/limpeza.api'
 
 const app = express()
 
 app.use(express.json())
+app.use(rotasLimpeza)
 
 app.use(fazendaApi)
 app.use(rotasTalhao)
