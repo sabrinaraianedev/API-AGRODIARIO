@@ -44,7 +44,7 @@ export class TalhaoDao {
     public async buscar(id: number): Promise<Talhao | null> {
         try {
             const result = await conexao.query<any>(
-                'SELECT id, area, fazenda_id as "fazendaId" WHERE id = $1',
+                'SELECT id, area, fazenda_id as "fazendaId" FROM talhao WHERE id = $1',
                 [id]
             )
 
