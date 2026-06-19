@@ -1,47 +1,17 @@
 import { Request, Response } from 'express'
 import { LimpezaServico } from '../servico/limpeza.servico'
-import { TalhaoDao } from '../dao/talhao.dao'
 
 export class LimpezaControle {
-
     private servico: LimpezaServico
-    private talhaoDao: TalhaoDao
 
     constructor() {
         this.servico = new LimpezaServico()
-        this.talhaoDao = new TalhaoDao()
     }
 
     public cadastrar = async (req: Request, res: Response) => {
         try {
-            const { tipo, data, talhaoId } = req.body
-
-            if (!talhaoId) {
-                throw new Error('O campo talhaoId não foi enviado no corpo da requisição.')
-            }
-
-            const dto = { tipo, data, talhaoId: Number(talhaoId) }
-
-            // Regra Complexa 1: Valida se o talhão existe no banco
-            const talhao = await this.talhaoDao.buscar(dto.talhaoId)
-            if (!talhao) {
-                throw new Error('Regra de Negócio: Não é possível registrar uma limpeza para um talhão inexistente')
-            }
-
-            // Regra Complexa 2: Evita duplicidade do mesmo tipo de limpeza no mesmo dia e talhão
-            const limpezasDoTalhao = await this.servico.buscarPorTalhao(dto.talhaoId)
-            const dataInputString = new Date(dto.data).toISOString().split('T')[0]
-            
-            const jaExisteIgual = limpezasDoTalhao.some(
-                l => l.data === dataInputString && l.tipo.toLowerCase() === dto.tipo.toLowerCase()
-            )
-            if (jaExisteIgual) {
-                throw new Error(`Regra de Negócio: Já existe uma atividade de limpeza do tipo "${dto.tipo}" agendada/registrada para este talhão nesta data`)
-            }
-
-            const limpeza = await this.servico.cadastrar(dto)
+            const limpeza = await this.servico.cadastrar(req.body)
             return res.status(201).json(limpeza)
-
         } catch (error: any) {
             return res.status(400).json({ erro: error.message })
         }
@@ -79,11 +49,6 @@ export class LimpezaControle {
     public atualizar = async (req: Request, res: Response) => {
         try {
             const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id
-            const talhaoId = Number(req.body.talhaoId)
-
-            const talhao = await this.talhaoDao.buscar(talhaoId)
-            if (!talhao) throw new Error('Regra de Negócio: Talhão não encontrado')
-
             await this.servico.atualizar(id, req.body)
             return res.status(200).json({ mensagem: 'Registro de limpeza atualizado com sucesso' })
         } catch (error: any) {
