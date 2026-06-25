@@ -3,7 +3,7 @@ import { TalhaoDao } from "../dao/talhao.dao";
 import { Poda } from "../modelo/poda";
 
 export class PodaServico {
-    // INJEÇÃO: Os DAOs entram prontos via construtor, sem "new" interno
+    
     public constructor(
         readonly dao: PodaDao,
         readonly talhaoDao: TalhaoDao
@@ -12,11 +12,9 @@ export class PodaServico {
     public async cadastrar(dto: any) {
         if (!dto.talhaoId) throw new Error('O campo talhaoId é obrigatório.');
 
-        // REGRA 1: Valida se o talhão existe
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Não é possível registrar uma poda para um talhão inexistente');
+        if (!talhao) throw new Error(' Não é possível registrar uma poda para um talhão inexistente');
 
-        // REGRA 2: Evita duplicidade do mesmo tipo de poda na mesma data e talhão
         const podasDoTalhao = await this.dao.buscarPorTalhao(Number(dto.talhaoId));
         const dataInputString = new Date(dto.data).toISOString().split('T')[0];
       
@@ -24,7 +22,7 @@ export class PodaServico {
             p => p.data === dataInputString && p.tipo.toLowerCase() === dto.tipo.toLowerCase()
         );
         if (jaExisteIgual) {
-            throw new Error(`Regra de Negócio: Já existe uma atividade de poda do tipo "${dto.tipo}" registrada para este talhão nesta data`);
+            throw new Error(` Já existe uma atividade de poda do tipo "${dto.tipo}" registrada para este talhão nesta data`);
         }
 
         const poda = Poda.build(dto.tipo, new Date(dto.data), Number(dto.talhaoId));
@@ -49,7 +47,7 @@ export class PodaServico {
 
     public async atualizar(id: string | number, dto: any) {
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Talhão não encontrado');
+        if (!talhao) throw new Error(' Talhão não encontrado');
 
         const poda = Poda.construir(Number(id), dto.tipo, new Date(dto.data), Number(dto.talhaoId));
         return await this.dao.atualizar(poda);

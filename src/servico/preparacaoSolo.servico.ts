@@ -4,7 +4,7 @@ import { PreparacaoSoloDtoCreate } from "../dto/preparacaoSolo.dto";
 import { PreparacaoSolo } from "../modelo/preparacaoSolo";
 
 export class PreparacaoSoloServico {
-    // INJEÇÃO: Os DAOs entram prontos via construtor
+    
     public constructor(
         readonly dao: PreparacaoSoloDao,
         readonly talhaoDao: TalhaoDao
@@ -13,18 +13,18 @@ export class PreparacaoSoloServico {
     public async cadastrar(dto: PreparacaoSoloDtoCreate) {
         if (!dto.talhaoId) throw new Error('O campo talhaoId é obrigatório.');
 
-        // REGRA 1: Valida se o talhão existe
+       
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Não é possível registrar uma preparação de solo para um talhão inexistente');
+        if (!talhao) throw new Error('Não é possível registrar uma preparação de solo para um talhão inexistente');
 
-        // REGRA 2: Evita duplicidade
+        
         const preparacoesDoTalhao = await this.dao.buscarPorTalhao(Number(dto.talhaoId));
         const dataInputString = new Date(dto.data).toISOString().split('T')[0];
       
         const jaExisteIgual = preparacoesDoTalhao.some(
             p => p.data === dataInputString && p.tipo.toLowerCase() === dto.tipo.toLowerCase()
         );
-        if (jaExisteIgual) throw new Error(`Regra de Negócio: Já existe uma atividade de "${dto.tipo}" registrada para este talhão nesta data`);
+        if (jaExisteIgual) throw new Error(`Já existe uma atividade de "${dto.tipo}" registrada para este talhão nesta data`);
 
         const preparacao = PreparacaoSolo.build(dto.tipo, new Date(dto.data), Number(dto.talhaoId));
         await this.dao.salvar(preparacao);
@@ -48,7 +48,7 @@ export class PreparacaoSoloServico {
 
     public async atualizar(id: string, dto: PreparacaoSoloDtoCreate) {
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Talhão não encontrado');
+        if (!talhao) throw new Error('Talhão não encontrado');
 
         const preparacao = PreparacaoSolo.construir(Number(id), dto.tipo, new Date(dto.data), Number(dto.talhaoId));
         return await this.dao.atualizar(preparacao);

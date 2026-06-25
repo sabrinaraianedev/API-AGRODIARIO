@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { TalhaoServico } from '../servico/talhao.servico';
 
 export class TalhaoControle {
-    // INJEÇÃO: Recebe o serviço pronto via construtor
+    
     public constructor(readonly servico: TalhaoServico) { }
 
     public cadastrar = async (req: Request, res: Response) => {

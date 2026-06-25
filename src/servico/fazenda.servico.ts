@@ -3,7 +3,7 @@ import { FazendaDtoCreate } from "../dto/fazenda.dto";
 import { Fazenda } from "../modelo/fazenda";
 
 export class FazendaServico {
-    // INJEÇÃO: O DAO agora é recebido via construtor
+
     public constructor(readonly dao: FazendaDao) { }
 
     public async cadastrar(dto: FazendaDtoCreate) {

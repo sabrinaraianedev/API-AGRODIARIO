@@ -12,7 +12,7 @@ export class Talhao {
         area: number,
         fazendaId: number
     ) {
-        // Regra de negócio simples: validação interna dos próprios atributos
+       
         if (area <= 0) {
             throw new Error("A área do talhão deve ser maior que zero")
         }

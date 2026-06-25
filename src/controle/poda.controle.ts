@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { PodaServico } from '../servico/poda.servico';
 
 export class PodaControle {
-    // INJEÇÃO: Recebe o serviço pronto via construtor
+    
     public constructor(readonly servico: PodaServico) { }
 
     public cadastrar = async (req: Request, res: Response) => {

@@ -2,14 +2,14 @@ import { LimpezaControle } from "../controle/limpeza.controle";
 import { LimpezaDao } from "../dao/limpeza.dao";
 import { TalhaoDao } from "../dao/talhao.dao";
 import { LimpezaServico } from "../servico/limpeza.servico";
-import { Api } from "./api"; // Classe centralizada do seu professor
+import { Api } from "./api"; 
 
 export class LimpezaApi {
     readonly limpezaControle: LimpezaControle;
 
-    // INJEÇÃO: Recebe o servidor centralizado de fora
+    
     private constructor(readonly api: Api) {
-        // Criamos os DAOs e repassamos de trás para frente na cadeia de dependências
+        
         const limpezaDao = new LimpezaDao();
         const talhaoDao = new TalhaoDao();
         const limpezaServico = new LimpezaServico(limpezaDao, talhaoDao);

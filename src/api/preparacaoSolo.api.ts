@@ -2,12 +2,12 @@ import { PreparacaoSoloControle } from "../controle/preparacaoSolo.controle";
 import { PreparacaoSoloDao } from "../dao/preparacaoSolo.dao";
 import { TalhaoDao } from "../dao/talhao.dao";
 import { PreparacaoSoloServico } from "../servico/preparacaoSolo.servico";
-import { Api } from "./api"; // Classe centralizada do seu professor
+import { Api } from "./api"; 
 
 export class PreparacaoSoloApi {
     readonly preparacaoSoloControle: PreparacaoSoloControle;
 
-    // INJEÇÃO: Instancia os DAOs e repassa de trás para frente na cadeia de dependências
+   
     private constructor(readonly api: Api) {
         const preparacaoSoloDao = new PreparacaoSoloDao();
         const talhaoDao = new TalhaoDao();

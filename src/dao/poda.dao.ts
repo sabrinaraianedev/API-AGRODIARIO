@@ -2,7 +2,6 @@ import { PodaListarDto } from "../dto/poda.dto"
 import { Poda } from "../modelo/poda"
 import conexao from "../util/conexao"
 
-// Garante o export correto como PodaDao para o serviço encontrar
 export class PodaDao {
 
     public async salvar(poda: Poda): Promise<void> {

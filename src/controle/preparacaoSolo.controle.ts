@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { PreparacaoSoloServico } from '../servico/preparacaoSolo.servico';
 
 export class PreparacaoSoloControle {
-    // INJEÇÃO: Recebe o serviço pronto via construtor
+    
     public constructor(readonly servico: PreparacaoSoloServico) { }
 
     public cadastrar = async (req: Request, res: Response) => {

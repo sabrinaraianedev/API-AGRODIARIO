@@ -4,7 +4,7 @@ import { LimpezaDtoCreate } from "../dto/limpeza.dto";
 import { Limpeza } from "../modelo/limpeza";
 
 export class LimpezaServico {
-    // INJEÇÃO: Ambos os DAOs são recebidos prontos via construtor
+   
     public constructor(
         readonly dao: LimpezaDao,
         readonly talhaoDao: TalhaoDao
@@ -13,18 +13,18 @@ export class LimpezaServico {
     public async cadastrar(dto: LimpezaDtoCreate) {
         if (!dto.talhaoId) throw new Error('O campo talhaoId é obrigatório.');
 
-        // REGRA 1: Valida se o talhão existe
+        
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Não é possível registrar uma limpeza para um talhão inexistente');
+        if (!talhao) throw new Error(' Não é possível registrar uma limpeza para um talhão inexistente');
 
-        // REGRA 2: Evita duplicidade
+        
         const limpezasDoTalhao = await this.dao.buscarPorTalhao(Number(dto.talhaoId));
         const dataInputString = new Date(dto.data).toISOString().split('T')[0];
         
         const jaExisteIgual = limpezasDoTalhao.some(
             l => l.data === dataInputString && l.tipo.toLowerCase() === dto.tipo.toLowerCase()
         );
-        if (jaExisteIgual) throw new Error(`Regra de Negócio: Já existe uma atividade de limpeza do tipo "${dto.tipo}" registrada para este talhão nesta data`);
+        if (jaExisteIgual) throw new Error(` Já existe uma atividade de limpeza do tipo "${dto.tipo}" registrada para este talhão nesta data`);
 
         const limpeza = Limpeza.build(dto.tipo, new Date(dto.data), Number(dto.talhaoId));
         await this.dao.salvar(limpeza);
@@ -48,7 +48,7 @@ export class LimpezaServico {
 
     public async atualizar(id: string, dto: LimpezaDtoCreate) {
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Talhão não encontrado');
+        if (!talhao) throw new Error(' Talhão não encontrado');
 
         const limpeza = Limpeza.construir(Number(id), dto.tipo, new Date(dto.data), Number(dto.talhaoId));
         return await this.dao.atualizar(limpeza);

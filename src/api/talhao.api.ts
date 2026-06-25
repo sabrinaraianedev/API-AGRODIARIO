@@ -2,12 +2,12 @@ import { TalhaoControle } from "../controle/talhao.controle";
 import { TalhaoDao } from "../dao/talhao.dao";
 import { FazendaDao } from "../dao/fazenda.dao";
 import { TalhaoServico } from "../servico/talhao.servico";
-import { Api } from "./api"; // Classe centralizada do seu professor
+import { Api } from "./api"; 
 
 export class TalhaoApi {
     readonly talhaoControle: TalhaoControle;
 
-    // INJEÇÃO: Instancia os DAOs e repassa de trás para frente na cadeia de dependências
+    
     private constructor(readonly api: Api) {
         const talhaoDao = new TalhaoDao();
         const fazendaDao = new FazendaDao();

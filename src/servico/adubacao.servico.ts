@@ -4,7 +4,7 @@ import { AdubacaoDtoCreate } from "../dto/adubacao.dto";
 import { Adubacao } from "../modelo/adubacao";
 
 export class AdubacaoServico {
-    // INJEÇÃO: Os dois DAOs entram prontos aqui
+    
     public constructor(
         readonly dao: AdubacaoDao,
         readonly talhaoDao: TalhaoDao
@@ -14,7 +14,7 @@ export class AdubacaoServico {
         if (!dto.talhaoId) throw new Error('O campo talhaoId é obrigatório.');
 
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Não é possível registrar uma adubação para um talhão inexistente');
+        if (!talhao) throw new Error('Não é possível registrar uma adubação para um talhão inexistente');
 
         const adubacoesDoTalhao = await this.dao.buscarPorTalhao(Number(dto.talhaoId));
         const dataInputString = new Date(dto.data).toISOString().split('T')[0];
@@ -22,7 +22,7 @@ export class AdubacaoServico {
         const jaExisteIgual = adubacoesDoTalhao.some(
             a => a.data === dataInputString && a.tipoAdubo.toLowerCase() === dto.tipoAdubo.toLowerCase()
         );
-        if (jaExisteIgual) throw new Error(`Regra de Negócio: O adubo "${dto.tipoAdubo}" já foi aplicado neste talhão na data informada`);
+        if (jaExisteIgual) throw new Error(`O adubo "${dto.tipoAdubo}" já foi aplicado neste talhão na data informada`);
 
         const adubacao = Adubacao.build(dto.tipoAdubacao, dto.tipoAdubo, new Date(dto.data), Number(dto.talhaoId));
         await this.dao.salvar(adubacao);
@@ -46,7 +46,7 @@ export class AdubacaoServico {
 
     public async atualizar(id: string, dto: AdubacaoDtoCreate) {
         const talhao = await this.talhaoDao.buscar(Number(dto.talhaoId));
-        if (!talhao) throw new Error('Regra de Negócio: Talhão não encontrado');
+        if (!talhao) throw new Error('Talhão não encontrado');
 
         const adubacao = Adubacao.construir(Number(id), dto.tipoAdubacao, dto.tipoAdubo, new Date(dto.data), Number(dto.talhaoId));
         return await this.dao.atualizar(adubacao);

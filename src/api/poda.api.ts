@@ -2,12 +2,12 @@ import { PodaControle } from "../controle/poda.controle";
 import { PodaDao } from "../dao/poda.dao";
 import { TalhaoDao } from "../dao/talhao.dao";
 import { PodaServico } from "../servico/poda.servico";
-import { Api } from "./api"; // Classe centralizada do seu professor
+import { Api } from "./api"; 
 
 export class PodaApi {
     readonly podaControle: PodaControle;
 
-    // INJEÇÃO: Instancia os DAOs e passa de trás para frente na cadeia de dependências
+    
     private constructor(readonly api: Api) {
         const podaDao = new PodaDao();
         const talhaoDao = new TalhaoDao();
