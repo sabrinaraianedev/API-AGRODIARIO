@@ -1,14 +1,13 @@
 import { FazendaControle } from "../controle/fazenda.controle";
 import { FazendaDao } from "../dao/fazenda.dao";
 import { FazendaServico } from "../servico/fazenda.servico";
-import { Api } from "./api"; // Classe centralizada do seu professor
+import { Api } from "./api"; 
 
 export class FazendaApi {
     readonly fazendaControle: FazendaControle;
 
-    // INJEÇÃO: Recebe o servidor genérico por parâmetro
     private constructor(readonly api: Api) {
-        // Monta a estrutura injetando as dependências de trás para frente
+
         const fazendaDao = new FazendaDao();
         const fazendaServico = new FazendaServico(fazendaDao);
         
