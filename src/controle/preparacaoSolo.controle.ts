@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
-import { TalhaoServico } from '../servico/talhao.servico'
+import { PreparacaoSoloServico } from '../servico/preparacaoSolo.servico'
 
-export class TalhaoControle {
-    private servico: TalhaoServico
+export class PreparacaoSoloControle {
+    private servico: PreparacaoSoloServico
 
     constructor() {
-        this.servico = new TalhaoServico()
+        this.servico = new PreparacaoSoloServico()
     }
 
     public cadastrar = async (req: Request, res: Response) => {
         try {
-            const talhao = await this.servico.cadastrar(req.body)
-            return res.status(201).json(talhao)
+            const preparacao = await this.servico.cadastrar(req.body)
+            return res.status(201).json(preparacao)
         } catch (error: any) {
             return res.status(400).json({ erro: error.message })
         }
@@ -40,7 +40,7 @@ export class TalhaoControle {
         try {
             const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id
             await this.servico.deletar(id)
-            return res.status(200).json({ mensagem: 'Talhão deletado com sucesso' })
+            return res.status(200).json({ mensagem: 'Preparação de solo deletada com sucesso' })
         } catch (error: any) {
             return res.status(404).json({ erro: error.message })
         }
@@ -50,7 +50,7 @@ export class TalhaoControle {
         try {
             const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id
             await this.servico.atualizar(id, req.body)
-            return res.status(200).json({ mensagem: 'Talhão atualizado com sucesso' })
+            return res.status(200).json({ mensagem: 'Preparação de solo atualizada com sucesso' })
         } catch (error: any) {
             return res.status(400).json({ erro: error.message })
         }
