@@ -1,21 +1,20 @@
 import 'reflect-metadata';
-import { Api } from "./api/api"; 
+import { Api } from "./api/api";
 import { AdubacaoApi } from './api/adubacao.api';
-
-// IMPORTANTE: Conforme você for refatorando os outros arquivos (Limpeza, Poda, etc.)
-// para o modelo de classe igual ao de Adubação, você vai importando e adicionando eles aqui embaixo.
+import { FazendaApi } from './api/fazenda.api'; // Importa a nova API de fazenda
 
 function main() {
-    const api = Api.build(); // Inicia o servidor central do professor
+   const api = Api.build(); // Inicia o servidor central do professor
 
-    // Liga as rotas de adubação injetando a api nele
-    AdubacaoApi.build(api);
+   // Ativa os módulos injetando o servidor neles
+   AdubacaoApi.build(api);
+   FazendaApi.build(api);
 
-    // Quando consertar as outras camadas, é só descomentar:
-    // LimpezaApi.build(api);
-    // FazendaApi.build(api);
+   // Conforme corrigir os outros módulos, adicione-os aqui:
+   // LimpezaApi.build(api);
+   // TalhaoApi.build(api);
 
-    api.start(); // Roda o servidor na porta 3000
+   api.start(); // Roda o servidor na porta 3000
 }
 
 main();
