@@ -1,23 +1,21 @@
-import express from 'express'
-import fazendaApi from './api/fazenda.api'
-import rotasTalhao from './api/talhao.api'
-import rotasPoda from './api/poda.api'
-import rotasPreparacaoSolo from './api/preparacaoSolo.api'
-import rotasLimpeza from './api/limpeza.api'
-import rotasAdubacao from './api/adubacao.api'
+import 'reflect-metadata';
+import { Api } from "./api/api"; 
+import { AdubacaoApi } from './api/adubacao.api';
 
+// IMPORTANTE: Conforme você for refatorando os outros arquivos (Limpeza, Poda, etc.)
+// para o modelo de classe igual ao de Adubação, você vai importando e adicionando eles aqui embaixo.
 
-const app = express()
+function main() {
+    const api = Api.build(); // Inicia o servidor central do professor
 
-app.use(express.json())
+    // Liga as rotas de adubação injetando a api nele
+    AdubacaoApi.build(api);
 
-app.use(rotasLimpeza)
-app.use(fazendaApi)
-app.use(rotasTalhao)
-app.use(rotasPoda)
-app.use(rotasPreparacaoSolo)
-app.use(rotasAdubacao)
+    // Quando consertar as outras camadas, é só descomentar:
+    // LimpezaApi.build(api);
+    // FazendaApi.build(api);
 
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000')
-})
+    api.start(); // Roda o servidor na porta 3000
+}
+
+main();
