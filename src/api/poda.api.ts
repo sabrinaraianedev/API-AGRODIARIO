@@ -1,13 +1,31 @@
-import { Router } from "express";
 import { PodaControle } from "../controle/poda.controle";
+import { PodaDao } from "../dao/poda.dao";
+import { TalhaoDao } from "../dao/talhao.dao";
+import { PodaServico } from "../servico/poda.servico";
+import { Api } from "./api"; // Classe centralizada do seu professor
 
-const router = Router();
-const controle = new PodaControle();
+export class PodaApi {
+    readonly podaControle: PodaControle;
 
-router.post("/poda", controle.cadastrar);
-router.get("/poda", controle.listar);
-router.get("/poda/:id", controle.buscar);
-router.delete("/poda/:id", controle.deletar);
-router.put("/poda/:id", controle.atualizar);
+    // INJEÇÃO: Instancia os DAOs e passa de trás para frente na cadeia de dependências
+    private constructor(readonly api: Api) {
+        const podaDao = new PodaDao();
+        const talhaoDao = new TalhaoDao();
+        const podaServico = new PodaServico(podaDao, talhaoDao);
+        
+        this.podaControle = new PodaControle(podaServico);
+    }
 
-export default router;
+    public static build(api: Api) {
+        const apiPoda = new PodaApi(api);
+        apiPoda.addRotas();
+    }
+
+    public addRotas() {
+        this.api.addRota("/poda", "POST", this.podaControle.cadastrar.bind(this.podaControle));
+        this.api.addRota("/poda", "GET", this.podaControle.listar.bind(this.podaControle));
+        this.api.addRota("/poda/:id", "GET", this.podaControle.buscar.bind(this.podaControle));
+        this.api.addRota("/poda/:id", "PUT", this.podaControle.atualizar.bind(this.podaControle));
+        this.api.addRota("/poda/:id", "DELETE", this.podaControle.deletar.bind(this.podaControle));
+    }
+}
